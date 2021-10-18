@@ -2,11 +2,6 @@
 pragma solidity >=0.5.16 <0.9.0;
 
 contract SupplyChain {
-  constructor() public {
-    // 1. Set the owner to the transaction sender
-    // 2. Initialize the sku count to 0. Question, is this necessary?
-  }
-
   function addItem(string memory _name, uint _price) public returns (bool) {
     // 1. Create a new item and put in array
     // 2. Increment the skuCount by one
@@ -145,6 +140,10 @@ contract SupplyChain {
     modifier received(uint sku) {
         require(items[sku].state == State.Received, "Item not received.");
         _;
+    }
+
+    constructor() public {
+        owner = msg.sender;
     }
 
 }
