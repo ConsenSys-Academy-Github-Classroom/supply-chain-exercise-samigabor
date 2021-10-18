@@ -2,27 +2,6 @@
 pragma solidity >=0.5.16 <0.9.0;
 
 contract SupplyChain {
-  function addItem(string memory _name, uint _price) public returns (bool) {
-    // 1. Create a new item and put in array
-    // 2. Increment the skuCount by one
-    // 3. Emit the appropriate event
-    // 4. return true
-
-    // hint:
-    // items[skuCount] = Item({
-    //  name: _name, 
-    //  sku: skuCount, 
-    //  price: _price, 
-    //  state: State.ForSale, 
-    //  seller: msg.sender, 
-    //  buyer: address(0)
-    //});
-    //
-    //skuCount = skuCount + 1;
-    // emit LogForSale(skuCount);
-    // return true;
-  }
-
   // Implement this buyItem function. 
   // 1. it should be payable in order to receive refunds
   // 2. this should transfer money to the seller, 
@@ -144,6 +123,23 @@ contract SupplyChain {
 
     constructor() public {
         owner = msg.sender;
+    }
+
+    function addItem(string memory _name, uint _price)
+        public
+        returns (bool)
+    {
+        items[skuCount] = Item({
+            name: _name,
+            sku: skuCount,
+            price: _price,
+            state: State.ForSale,
+            seller: msg.sender,
+            buyer: address(0)
+        });
+        skuCount = skuCount + 1;
+        emit LogForSale(skuCount);
+        return true;
     }
 
 }
