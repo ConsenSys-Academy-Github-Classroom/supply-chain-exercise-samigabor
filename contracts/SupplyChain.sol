@@ -2,13 +2,6 @@
 pragma solidity >=0.5.16 <0.9.0;
 
 contract SupplyChain {
-  // 1. Add modifiers to check 
-  //    - the item is shipped already 
-  //    - the person calling this function is the buyer. 
-  // 2. Change the state of the item to received. 
-  // 3. Call the event associated with this function!
-  function receiveItem(uint sku) public {}
-
   // Uncomment the following code block. it is needed to run tests
   /* function fetchItem(uint _sku) public view */ 
   /*   returns (string memory name, uint sku, uint price, uint state, address seller, address buyer) */ 
@@ -142,6 +135,15 @@ contract SupplyChain {
     {
         items[sku].state = State.Shipped;
         emit LogShipped(sku);
+    }
+
+    function receiveItem(uint sku)
+        public
+        shipped(sku)
+        verifyCaller(items[sku].buyer)
+    {
+        items[sku].state = State.Received;
+        emit LogReceived(sku);
     }
 
 }
