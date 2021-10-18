@@ -2,19 +2,6 @@
 pragma solidity >=0.5.16 <0.9.0;
 
 contract SupplyChain {
-  // Implement this buyItem function. 
-  // 1. it should be payable in order to receive refunds
-  // 2. this should transfer money to the seller, 
-  // 3. set the buyer as the person who called this transaction, 
-  // 4. set the state to Sold. 
-  // 5. this function should use 3 modifiers to check 
-  //    - if the item is for sale, 
-  //    - if the buyer paid enough, 
-  //    - check the value after the function is called to make 
-  //      sure the buyer is refunded any excess ether sent. 
-  // 6. call the event associated with this function!
-  function buyItem(uint sku) public {}
-
   // 1. Add modifiers to check:
   //    - the item is sold already 
   //    - the person calling this function is the seller. 
@@ -140,6 +127,19 @@ contract SupplyChain {
         skuCount = skuCount + 1;
         emit LogForSale(skuCount);
         return true;
+    }
+
+    function buyItem(uint sku)
+        public
+        payable
+        forSale(sku)
+        paidEnough(items[sku].price)
+        checkValue(sku)
+    {
+        items[sku].buyer = msg.sender;
+        address(items[sku].seller).transfer(items[sku].price);
+        items[sku].state = State.Sold;
+        emit LogSold(sku);
     }
 
 }
