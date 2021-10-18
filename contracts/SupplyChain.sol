@@ -2,13 +2,6 @@
 pragma solidity >=0.5.16 <0.9.0;
 
 contract SupplyChain {
-  // 1. Add modifiers to check:
-  //    - the item is sold already 
-  //    - the person calling this function is the seller. 
-  // 2. Change the state of the item to shipped. 
-  // 3. call the event associated with this function!
-  function shipItem(uint sku) public {}
-
   // 1. Add modifiers to check 
   //    - the item is shipped already 
   //    - the person calling this function is the buyer. 
@@ -140,6 +133,15 @@ contract SupplyChain {
         address(items[sku].seller).transfer(items[sku].price);
         items[sku].state = State.Sold;
         emit LogSold(sku);
+    }
+
+    function shipItem(uint sku)
+        public
+        sold(sku)
+        verifyCaller(items[sku].seller)
+    {
+        items[sku].state = State.Shipped;
+        emit LogShipped(sku);
     }
 
 }
